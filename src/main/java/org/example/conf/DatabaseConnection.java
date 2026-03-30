@@ -7,8 +7,8 @@ import java.sql.SQLException;
 public class DatabaseConnection {
 
     private static final String URL = "jdbc:mysql://localhost:3306/aerofly";
-    private static final String USER = "root";
-    private static final String PASSWORD = "Oracleap17$";
+    private static final String USER = "tu_usuario"; // Recuerde ingresar su correspondiente usuario
+    private static final String PASSWORD = "tu_password"; // y contraseña
 
     private static DatabaseConnection instance;
     private Connection connection;

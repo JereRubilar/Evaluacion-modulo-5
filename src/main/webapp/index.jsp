@@ -47,9 +47,6 @@
                 <li class="nav-item">
                     <a class="nav-link" href="reservas">Gestión de Reservas</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="reservas.jsp">Mis Reservas</a>
-                </li>
             </ul>
         </div>
     </div>
