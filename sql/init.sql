@@ -34,3 +34,9 @@ CREATE TABLE Reserva (
                          FOREIGN KEY (id_cliente) REFERENCES Cliente(id_cliente),
                          FOREIGN KEY (id_vuelo) REFERENCES Vuelo(id_vuelo)
 );
+
+/* inserciones de prueba */
+INSERT INTO vuelo (ciudad_despegue, ciudad_aterrizaje, fecha_salida, fecha_llegada, hora_abordaje, hora_salida, hora_llegada)
+VALUES ('Santiago', 'Puerto Montt', '2026-05-15','2026-05-15', '10:00:00','10:30:00','12:00:00'),
+       ('Concepción', 'Antofagasta', '2026-05-16' ,'2026-05-16', '14:30:00','15:00:00','17:30:00'),
+       ('Santiago', 'Punta Arenas', '2026-05-17','2026-05-17', '08:00:00','08:20:00','11:00:00');
