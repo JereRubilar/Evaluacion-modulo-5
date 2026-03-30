@@ -6,10 +6,7 @@ import org.example.model.Reserva;
 import org.example.model.SeccionCliente;
 import org.example.repository.ReservaRepository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,31 +16,31 @@ public class ReservaRepositoryImpl implements ReservaRepository {
 
     @Override
     public Integer crearReserva(Reserva reserva) {
-        String query = "INSERT INTO reserva (id_cliente, id_vuelo, numero_asiento, estado_vuelo, seccion_cliente) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO reserva (id_cliente, id_vuelo, numero_asiento, estado_vuelo, seccion_cliente) VALUES (?, ?, ?, ?, ?)";
 
-        try (
-                Connection connection = databaseConnection.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)
-        ) {
-            preparedStatement.setInt(1, reserva.getIdCliente());
-            preparedStatement.setInt(2, reserva.getIdVuelo());
-            preparedStatement.setInt(3, reserva.getNumeroAsiento());
-            preparedStatement.setString(4, reserva.getEstadoVuelo().getValor());
-            preparedStatement.setString(5, reserva.getSeccionCliente().getValor());
-            preparedStatement.executeUpdate();
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                return generatedKeys.getInt(1);
+            pstmt.setInt(1, reserva.getIdCliente());
+            pstmt.setInt(2, reserva.getIdVuelo());
+            pstmt.setInt(3, reserva.getNumeroAsiento());
+            pstmt.setString(4, reserva.getEstadoVuelo().getValor());
+            pstmt.setString(5, reserva.getSeccionCliente().getValor());
+
+            int filasAfectadas = pstmt.executeUpdate();
+
+            if (filasAfectadas > 0) {
+                try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        return generatedKeys.getInt(1);
+                    }
+                }
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return 0;
     }
-
 
     @Override
     public List<Reserva> obtenerReservas() {

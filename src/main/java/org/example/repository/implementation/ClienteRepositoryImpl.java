@@ -4,10 +4,7 @@ import org.example.conf.DatabaseConnection;
 import org.example.model.Cliente;
 import org.example.repository.ClienteRepository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,27 +14,25 @@ public class ClienteRepositoryImpl implements ClienteRepository {
 
     @Override
     public Integer crearCliente(Cliente cliente) {
-        String query = "INSERT INTO cliente (nombre, apellido, rut) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO cliente (nombre, apellido, rut) VALUES (?, ?, ?)";
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-        try (
-                Connection connection = databaseConnection.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)
-        ) {
-            preparedStatement.setString(1, cliente.getNombre());
-            preparedStatement.setString(2, cliente.getApellido());
-            preparedStatement.setString(3, cliente.getRut());
-            preparedStatement.executeUpdate();
+            pstmt.setString(1, cliente.getNombre());
+            pstmt.setString(2, cliente.getApellido());
+            pstmt.setString(3, cliente.getRut());
 
-            ResultSet resultSet = preparedStatement.getGeneratedKeys();
-            if (resultSet.next()) {
-                return resultSet.getInt(1);
+            pstmt.executeUpdate();
+
+            try (ResultSet rs = pstmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    return rs.getInt(1); // Retorna el ID real generado por MySQL
+                }
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return 0;
+        return null;
     }
 
     @Override

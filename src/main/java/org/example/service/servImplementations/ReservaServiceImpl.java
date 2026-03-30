@@ -58,15 +58,17 @@ public class ReservaServiceImpl implements ReservaService {
         if (reservasExistentes != null) {
             for (Reserva reserva : reservasExistentes) {
                 Vuelo vuelo = vueloRepository.obtenerVueloPorId(reserva.getIdVuelo());
+                // NUEVO: Buscar el cliente para obtener su nombre y apellido
+                Cliente cliente = clienteRepository.obtenerClientePorId(reserva.getIdCliente());
 
-                String despegue = (vuelo != null) ? vuelo.getCiudadDespegue() : "N/A";
-                String aterrizaje = (vuelo != null) ? vuelo.getCiudadAterrizaje() : "N/A";
+                ListarReservaDTO reservaDTO = new ListarReservaDTO();
+                reservaDTO.setIdReserva(reserva.getIdReserva());
+                reservaDTO.setNombreCliente(cliente != null ? cliente.getNombre() : "N/A");
+                reservaDTO.setApellidoCliente(cliente != null ? cliente.getApellido() : "");
+                reservaDTO.setCiudadDespegue(vuelo != null ? vuelo.getCiudadDespegue() : "N/A");
+                reservaDTO.setCiudadAterrizaje(vuelo != null ? vuelo.getCiudadAterrizaje() : "N/A");
+                reservaDTO.setNumeroAsiento(reserva.getNumeroAsiento());
 
-                ListarReservaDTO reservaDTO = new ListarReservaDTO(
-                        reserva.getIdReserva(),
-                        despegue,
-                        aterrizaje
-                );
                 reservasDTO.add(reservaDTO);
             }
         }
@@ -119,14 +121,26 @@ public class ReservaServiceImpl implements ReservaService {
         if (reservaDTO.getApellidoCliente() == null || reservaDTO.getApellidoCliente().trim().isEmpty()) {
             throw new IllegalArgumentException("El apellido del cliente es obligatorio.");
         }
-        if (reservaDTO.getRutCliente() == null || reservaDTO.getRutCliente().trim().isEmpty()) {
-            throw new IllegalArgumentException("El RUT del cliente es obligatorio.");
-        }
         if (reservaDTO.getIdVuelo() == null) {
             throw new IllegalArgumentException("Vuelo es obligatorio.");
         }
         if (reservaDTO.getNumeroAsiento() <= 0) {
             throw new IllegalArgumentException("El número de asiento debe ser mayor a cero.");
         }
+
+        if (reservaDTO.getRutCliente() == null || reservaDTO.getRutCliente().trim().isEmpty()) {
+            throw new IllegalArgumentException("El RUT del cliente es obligatorio.");
+        }
+
+        String rutLimpio = reservaDTO.getRutCliente()
+                .replace(".", "")
+                .replace("-", "")
+                .trim();
+
+        if (rutLimpio.length() > 12) {
+            throw new IllegalArgumentException("El RUT ingresado es demasiado largo.");
+        }
+
+        reservaDTO.setRutCliente(rutLimpio);
     }
 }

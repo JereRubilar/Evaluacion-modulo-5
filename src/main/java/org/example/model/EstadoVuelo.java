@@ -17,6 +17,7 @@ public enum EstadoVuelo {
     }
 
     public static EstadoVuelo fromValor(String valor) {
+        if (valor == null) return ATRASADO;
         for (EstadoVuelo estado : EstadoVuelo.values()) {
             if (estado.getValor().equalsIgnoreCase(valor)) {
                 return estado;

@@ -44,15 +44,21 @@
                             <input type="text" name="apellidoCliente" class="form-control form-control-sm" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label small fw-bold">RUT</label>
-                            <input type="text" name="rutCliente" class="form-control form-control-sm" placeholder="12.345.678-9" required>
+                            <label class="form-label small">RUT del Pasajero</label>
+                            <input type="text"
+                                   name="rutCliente"
+                                   class="form-control"
+                                   placeholder="Ej: 12345678-9"
+                                   maxlength="12"
+                                   required>
+                            <div class="form-text">Máximo 12 caracteres, con o sin guion.</div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label small fw-bold">Vuelo Disponible</label>
                             <select name="idVuelo" class="form-select form-select-sm" required>
                                 <option value="">Seleccione un vuelo...</option>
                                 <c:forEach items="${vuelos}" var="v">
-                                    <option value="${v.idVuelo}">${v.numeroVuelo} - ${v.origen} / ${v.destino}</option>
+                                    <option value="${v.idVuelo}">${v.idVuelo} - ${v.ciudadDespegue} / ${v.ciudadAterrizaje}</option>
                                 </c:forEach>
                             </select>
                         </div>
@@ -64,13 +70,13 @@
                             <div class="col-6 mb-3">
                                 <label class="form-label small fw-bold">Sección</label>
                                 <select name="seccionCliente" class="form-select form-select-sm">
-                                    <option value="Economica">Económica</option>
-                                    <option value="Ejecutiva">Ejecutiva</option>
-                                    <option value="Primera Clase">Primera Clase</option>
+                                    <option value="ECONOMICA">Económica</option>
+                                    <option value="EJECUTIVO">Ejecutiva</option>
+                                    <option value="VIP">VIP</option>
                                 </select>
                             </div>
                         </div>
-                        <input type="hidden" name="estadoVuelo" value="Confirmado">
+                        <input type="hidden" name="estadoVuelo" value="A TIEMPO">
                         <button type="submit" class="btn btn-success w-100 mt-2">Reservar Ahora</button>
                     </form>
                 </div>
@@ -100,7 +106,11 @@
                                 <tr>
                                     <td class="fw-bold">#${r.idReserva}</td>
                                     <td>${r.nombreCliente} ${r.apellidoCliente}</td>
-                                    <td><span class="badge bg-info text-dark">${r.numeroVuelo}</span></td>
+                                    <td>
+                                        <span class="badge bg-info text-dark">
+                                            ${r.ciudadDespegue} -> ${r.ciudadAterrizaje}
+                                        </span>
+                                    </td>
                                     <td>${r.numeroAsiento}</td>
                                     <td class="text-center">
                                         <a href="reservas?id=${r.idReserva}" class="btn btn-outline-primary btn-sm">

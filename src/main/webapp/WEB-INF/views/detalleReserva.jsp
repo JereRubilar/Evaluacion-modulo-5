@@ -13,7 +13,7 @@
             background: white;
         }
         .barcode {
-            font-family: 'Libre Barcode 39', cursive; /* Opcional si quieres agregar una fuente de barras */
+            font-family: 'Libre Barcode 39', cursive;
             font-size: 2rem;
         }
     </style>
@@ -45,8 +45,8 @@
                             <div class="row">
                                 <div class="col-sm-6 mb-3">
                                     <label class="text-muted small d-block">PASAJERO</label>
-                                    <span class="h5">${detalle.nombreCliente} ${detalle.apellidoCliente}</span>
-                                    <p class="text-muted small mt-1">RUT: ${detalle.rutCliente}</p>
+                                    <span class="h5">${detalle.nombre} ${detalle.apellido}</span>
+                                    <p class="text-muted small mt-1">RUT: ${detalle.rut}</p>
                                 </div>
                                 <div class="col-sm-6 mb-3 text-sm-end">
                                     <label class="text-muted small d-block">ID RESERVA</label>
@@ -58,8 +58,8 @@
 
                             <div class="row text-center">
                                 <div class="col-4">
-                                    <label class="text-muted small d-block">VUELO</label>
-                                    <span class="fw-bold">${detalle.numeroVuelo}</span>
+                                    <label class="text-muted small d-block">ORIGEN / DESTINO</label>
+                                    <span class="fw-bold">${detalle.ciudadDespegue} / ${detalle.ciudadAterrizaje}</span>
                                 </div>
                                 <div class="col-4 border-start border-end">
                                     <label class="text-muted small d-block">ASIENTO</label>
